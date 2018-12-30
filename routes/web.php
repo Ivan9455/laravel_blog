@@ -11,6 +11,10 @@
 |
 */
 
+Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
+    Route::resource('/post', 'PostController', ['as' => 'user']);
+});
+Route::get('/user/{id}', 'UserController@show');
 Route::get('/', function () {
     return view('welcome');
 });
