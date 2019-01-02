@@ -22,6 +22,16 @@ class CreateRatingsTable extends Migration
             $table->enum('rating', [-1, 1]);//like,not like ,diz like
             $table->timestamps();
         });
+        DB::table('ratings')->insert([
+            'id_user' => 2,
+            'id_post' => 1,
+            'rating' => '1'
+        ]);
+        DB::table('ratings')->insert([
+            'id_user' => 3,
+            'id_post' => 1,
+            'rating' => '1'
+        ]);
     }
 
     /**

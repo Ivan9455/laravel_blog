@@ -20,6 +20,10 @@ class CreatePostsTable extends Migration
             $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();
         });
+        DB::table('posts')->insert([
+            'content' => 'text',
+            'id_user' => 1
+        ]);
     }
 
     /**

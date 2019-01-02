@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Rating;
 use App\Post;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -32,7 +34,14 @@ class PostController extends Controller
         $user = User::find($data['id_user']);
         if (isset($user->id)) {
             $posts = Post::all()->where('id_user', '=', $user->id)->reverse();
-
+            for($i = 0;$i<count($posts);$i++){
+                $posts[$i]->like = Rating::all()
+                    ->where('id_post','=',$posts[$i]->id)
+                    ->where('rating','=','1')->count();
+                $posts[$i]->dizlike = Rating::all()
+                    ->where('id_post','=',$posts[$i]->id)
+                    ->where('rating','=','-1')->count();
+            }
             return view('post.all', ['posts' => $posts]);
         }
 
