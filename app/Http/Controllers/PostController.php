@@ -37,10 +37,10 @@ class PostController extends Controller
             for($i = 0;$i<count($posts);$i++){
                 $posts[$i]->like = Rating::all()
                     ->where('id_post','=',$posts[$i]->id)
-                    ->where('rating','=','1')->count();
+                    ->where('status','=','1')->count();
                 $posts[$i]->dizlike = Rating::all()
                     ->where('id_post','=',$posts[$i]->id)
-                    ->where('rating','=','-1')->count();
+                    ->where('status','=','-1')->count();
             }
             return view('post.all', ['posts' => $posts]);
         }
