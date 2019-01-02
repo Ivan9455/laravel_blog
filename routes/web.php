@@ -10,11 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
-    Route::resource('/post', 'PostController', ['as' => 'user']);
-});
-Route::get('/user/{id}', 'UserController@show');
+Route::post('/post/all', 'PostController@all');
+Route::resource('/post', 'PostController');
+Route::get('/user/{id}', 'PostController@index');
 Route::get('/', function () {
     return view('welcome');
 });

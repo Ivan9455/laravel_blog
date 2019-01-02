@@ -5,9 +5,19 @@
         <div>данный пользовательне не существует</div>
     @else
         <div>user name: {{$name}}</div>
-        <form method="post" action="{{route('user.post.store')}}">
+        @if($id!==false&&isset(Auth::user()->id)&&$id ===Auth::user()->id)
+            <form class="form-horizontal post_store" method="post">
+                {{csrf_field()}}
+                <textarea name="content" class="post_content"></textarea>
+                <input type="button" value="Create Post" class="add">
+            </form>
+        @endif
+        <div class="post_all">
 
-        </form>
+        </div>
     @endif
 
+
+        <script src="{{asset('js/post.js')}}"></script>
+        <script src="{{asset('js/script_post.js')}}"></script>
 @endsection
