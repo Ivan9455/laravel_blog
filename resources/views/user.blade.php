@@ -9,7 +9,7 @@
             <form class="form-horizontal post_store" method="post">
                 {{csrf_field()}}
                 <textarea name="content" class="post_content"></textarea>
-                <input type="button" value="Create Post" class="add">
+                <input class="btn btn-group add" type="button" value="Create Post">
             </form>
         @endif
         <div class="post_all">

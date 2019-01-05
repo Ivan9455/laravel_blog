@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::post('/post/status', 'PostController@status');
 Route::post('/post/all', 'PostController@all');
 Route::resource('/post', 'PostController');
 Route::get('/user/{id}', 'PostController@index');
