@@ -15,3 +15,4 @@
 @empty
     <div>постов нет</div>
 @endforelse
+

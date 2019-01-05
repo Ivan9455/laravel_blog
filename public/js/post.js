@@ -2,7 +2,7 @@ let Post = {
     save: function (data) {
         $.ajax({
             type: 'POST',
-            url: '/post',
+            url: '/post/store',
             data: data,
             success: function (result) {
                 $('.post_content').val('');
@@ -13,10 +13,10 @@ let Post = {
     eventLoad: function () {
         $(".add").click(function (e) {
             e.preventDefault();
+            //console.log($('.post_store').serialize())
             Post.save($('.post_store').serialize())
         });
         $(".post_all").on('click', ".status", function () {
-
             $.ajax({
                 type: 'POST',
                 url: '/post/status',
@@ -27,8 +27,6 @@ let Post = {
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (result) {
-                    console.log(result)
-                    //$('.post_content').val('');
                     Post.load();
                 }
             })
@@ -42,6 +40,7 @@ let Post = {
             url: '/post/all',
             data: {id_user: id_user, _token: $('meta[name="csrf-token"]').attr('content')},
             success: function (result) {
+                console.log(result)
                 $('.post_all').html(result);
             }
         });

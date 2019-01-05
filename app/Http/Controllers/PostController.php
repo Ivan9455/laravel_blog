@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Rating;
 use App\Post;
 use App\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,12 +16,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index($id)
     {
         $user = User::find($id);
         if (isset($user->id)) {
-            //$posts = Post::all()->where('id_user', '=', $user->id)->reverse();
-
             return view('user', ['name' => $user->name, 'id' => $user->id]);
         }
 
@@ -33,16 +33,18 @@ class PostController extends Controller
         $user = User::find($data['id_user']);
         if (isset($user->id)) {
             $posts = Post::all()->where('id_user', '=', $user->id)->reverse();
-            for ($i = 0; $i < count($posts); $i++) {
-                $posts[$i]->like = Rating::all()
-                    ->where('id_post', '=', $posts[$i]->id)
+            $result = new Collection();
+            foreach ($posts as $post) {
+                $post->like = Rating::all()
+                    ->where('id_post', '=', $post->id)
                     ->where('status', '=', '1')->count();
-                $posts[$i]->dizlike = Rating::all()
-                    ->where('id_post', '=', $posts[$i]->id)
+                $post->dizlike = Rating::all()
+                    ->where('id_post', '=', $post->id)
                     ->where('status', '=', '-1')->count();
+                $result->add($post);
             }
 
-            return view('post.all', ['posts' => $posts]);
+            return view('post.all', ['posts' => $result]);
         }
 
         return view('post.all', []);
@@ -51,24 +53,22 @@ class PostController extends Controller
     public function status(Request $request)
     {
         $post = $request->all();
-        if (Auth::check()) {
-            if (Rating::all()
+        if (Rating::all()
+            ->where('id_post', '=', $post['id'])
+            ->where('id_user', '=', Auth::id())->isEmpty()) {
+            Rating::create([
+                'id_user' => Auth::id(),
+                'id_post' => $post['id'],
+                'status' => $post['status']
+            ]);
+        } else {
+            $rating = Rating::all()
                 ->where('id_post', '=', $post['id'])
-                ->where('id_user', '=', Auth::id())->isEmpty()) {
-                Rating::create([
-                    'id_user' => Auth::id(),
-                    'id_post' => $post['id'],
-                    'status' => $post['status']
-                ]);
+                ->where('id_user', '=', Auth::id())->first();
+            if ($rating->status !== $post['status']) {
+                Rating::find($rating->id)->update(['status' => $post['status']]);
             } else {
-                $rating = Rating::all()
-                    ->where('id_post', '=', $post['id'])
-                    ->where('id_user', '=', Auth::id())->first();
-                if ($rating->status !== $post['status']) {
-                    Rating::find($rating->id)->update(['status' => $post['status']]);
-                } else {
-                    Rating::find($rating->id)->delete();
-                }
+                Rating::find($rating->id)->delete();
             }
         }
     }
