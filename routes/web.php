@@ -11,9 +11,9 @@
 |
 */
 //Route::resource('/post','PostController');
-Route::post('/post/status', 'PostController@status');
+Route::post('/post/status', 'PostController@status')->middleware('auth');
 Route::post('/post/all', 'PostController@all');
-Route::post('/post/store', 'PostController@store');
+Route::post('/post/store', 'PostController@store')->middleware('auth');;
 Route::get('/user/{id}', 'PostController@index');
 Route::get('/', function () {
     return view('welcome');

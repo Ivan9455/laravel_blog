@@ -2,14 +2,14 @@
 
 @section('content')
     @if($name === false)
-        <div>данный пользовательне не существует</div>
+        <div class="user_name">данный пользовательне не существует</div>
     @else
-        <div>user name: {{$name}}</div>
+        <div class="user_name">user name: {{$name}}</div>
         @if($id!==false&&isset(Auth::user()->id)&&$id ===Auth::user()->id)
             <form class="form-horizontal post_store" method="post">
                 {{csrf_field()}}
                 <textarea name="content" class="post_content"></textarea>
-                <input class="btn btn-group add" type="button" value="Create Post">
+                <input class="btn btn-group add" type="button" value="&#10148;">
             </form>
         @endif
         <div class="post_all">

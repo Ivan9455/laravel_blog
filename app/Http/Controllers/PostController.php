@@ -73,6 +73,9 @@ class PostController extends Controller
         }
     }
 
+    public function best(){
+
+    }
     /**
      * Show the form for creating a new resource.
      *
