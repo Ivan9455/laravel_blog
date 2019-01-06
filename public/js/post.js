@@ -1,5 +1,5 @@
 let Post = {
-    postLimit:3,
+    postLimit: 3,
     save: function (data) {
         $.ajax({
             type: 'POST',
@@ -43,8 +43,9 @@ let Post = {
             url: '/post/all',
             data: {
                 id_user: id_user,
-                post_limit:post_limit,
-                _token: $('meta[name="csrf-token"]').attr('content')},
+                post_limit: post_limit,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
             success: function (result) {
                 $('.post_all').html(result);
             }
