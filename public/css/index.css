@@ -1,9 +1,7 @@
 
 .post_content {
     resize: none;
-    max-width: 396px;
-    width: 376px;
-    min-width: 196px;
+    width: calc(85% - 34px);
     height: 70px;
     float: left;
     border: 1px solid rgba(28, 56, 47, 0.73);
@@ -11,7 +9,7 @@
     margin: 15px;
 }
 
-.posts ,.user_name{
+.posts, .user_name {
     max-width: 500px;
     min-width: 300px;
     margin: 0 auto;
@@ -22,14 +20,20 @@
 }
 
 .post_store {
-    display: inline-block;
+    height: 100px;
+}
+
+.add_block {
+    margin: 15px 0;
+    width: 15%;
+    float: left;
 }
 
 .add {
     width: 30px;
     height: 30px;
     border-radius: 30px;
-    margin: 35px 10px;
+    margin: 20px 0;
     line-height: 15px;
     text-indent: -3px;
     float: left;
@@ -42,7 +46,7 @@
 .post {
     max-width: 440px;
     min-width: 240px;
-    padding: 15px;
+    margin: 20px 15px;
 }
 
 .post_status {
@@ -52,4 +56,8 @@
 .post_time {
     float: right;
     line-height: 40px;
+}
+
+.post_load {
+    display: inherit;
 }

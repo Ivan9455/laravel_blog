@@ -1,4 +1,5 @@
 let Post = {
+    postLimit:3,
     save: function (data) {
         $.ajax({
             type: 'POST',
@@ -6,7 +7,7 @@ let Post = {
             data: data,
             success: function (result) {
                 $('.post_content').val('');
-                Post.load();
+                Post.load($('.post_all')[0].children.length + 1);
             }
         });
     },
@@ -26,18 +27,24 @@ let Post = {
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (result) {
-                    Post.load();
+                    Post.load($('.post_all')[0].children.length);
                 }
             })
-
         });
+        $('.post_load').click(function (e) {
+            e.preventDefault();
+            Post.load($('.post_all')[0].children.length + Post.postLimit)
+        })
     },
-    load: function () {
+    load: function (post_limit = Post.postLimit) {
         let id_user = location.pathname.split('/')[2];
         $.ajax({
             type: 'POST',
             url: '/post/all',
-            data: {id_user: id_user, _token: $('meta[name="csrf-token"]').attr('content')},
+            data: {
+                id_user: id_user,
+                post_limit:post_limit,
+                _token: $('meta[name="csrf-token"]').attr('content')},
             success: function (result) {
                 $('.post_all').html(result);
             }

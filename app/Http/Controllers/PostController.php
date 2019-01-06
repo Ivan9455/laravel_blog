@@ -44,7 +44,7 @@ class PostController extends Controller
                       AND posts.id = ratings.id_post)) as count_dislike
 FROM posts
 WHERE posts.id_user = ?
-ORDER by count_like, count_dislike , posts.created_at  DESC   LIMIT 3', [$user->id]);
+ORDER by count_like, count_dislike , posts.created_at  DESC   LIMIT ?', [$user->id, $data['post_limit']]);
 
             return view('post.all', ['posts' => collect($posts)]);
         }
