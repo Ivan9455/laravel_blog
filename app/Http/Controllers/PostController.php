@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -32,19 +33,20 @@ class PostController extends Controller
         $data = $request->all();
         $user = User::find($data['id_user']);
         if (isset($user->id)) {
-            $posts = Post::all()->where('id_user', '=', $user->id)->reverse();
-            $result = new Collection();
-            foreach ($posts as $post) {
-                $post->like = Rating::all()
-                    ->where('id_post', '=', $post->id)
-                    ->where('status', '=', '1')->count();
-                $post->dizlike = Rating::all()
-                    ->where('id_post', '=', $post->id)
-                    ->where('status', '=', '-1')->count();
-                $result->add($post);
-            }
+            $posts = DB::select('
+            SELECT *, COALESCE((SELECT COUNT(ratings.status)
+                    FROM ratings
+                    WHERE ratings.status = \'1\'
+                      AND posts.id = ratings.id_post)) as count_like,
+          COALESCE((SELECT COUNT(ratings.status)
+                    FROM ratings
+                    WHERE ratings.status = \'-1\'
+                      AND posts.id = ratings.id_post)) as count_dislike
+FROM posts
+WHERE posts.id_user = ?
+ORDER by count_like, count_dislike , posts.created_at  DESC   LIMIT 3', [$user->id]);
 
-            return view('post.all', ['posts' => $result]);
+            return view('post.all', ['posts' => collect($posts)]);
         }
 
         return view('post.all', []);
@@ -73,9 +75,10 @@ class PostController extends Controller
         }
     }
 
-    public function best(){
-
+    public function best()
+    {
     }
+
     /**
      * Show the form for creating a new resource.
      *

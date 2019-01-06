@@ -14,6 +14,7 @@
 .posts ,.user_name{
     max-width: 500px;
     min-width: 300px;
+    margin: 0 auto;
 }
 
 .post_all {
