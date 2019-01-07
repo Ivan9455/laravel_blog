@@ -11,11 +11,13 @@ let Post = {
             }
         });
     },
-    eventLoad: function () {
+    eventAdd:function(){
         $(".add").click(function (e) {
             e.preventDefault();
             Post.save($('.post_store').serialize())
         });
+    },
+    eventStatus:function(){
         $(".post_all").on('click', ".status", function () {
             $.ajax({
                 type: 'POST',
@@ -31,6 +33,8 @@ let Post = {
                 }
             })
         });
+    },
+    eventLoad: function () {
         $('.post_load').click(function (e) {
             e.preventDefault();
             Post.load($('.post_all')[0].children.length + Post.postLimit)

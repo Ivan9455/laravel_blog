@@ -1,4 +1,6 @@
 $(document).ready(function () {
-    Post.eventLoad();
+    Post.eventAdd();
     Post.load();
+    Post.eventStatus();
+    Post.eventLoad();
 });

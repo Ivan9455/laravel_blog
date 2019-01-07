@@ -7,13 +7,13 @@
         @else
             <div class="user_name">user name: {{$name}}</div>
             @if($id!==false&&isset(Auth::user()->id)&&$id ===Auth::user()->id)
-                <div class="post_store" >
+                <form class="post_store" >
                     {{csrf_field()}}
                     <textarea name="content" class="post_content"></textarea>
                     <div class="add_block">
                         <input class="btn btn-group add" type="button" value="&#10148;">
                     </div>
-                </div>
+                </form>
             @endif
             <div class="post_all">
 
