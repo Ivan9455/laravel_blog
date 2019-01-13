@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-
+use Illuminate\Support\Facades\DB;
 class CreatePostsTable extends Migration
 {
     /**
@@ -14,19 +14,23 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('content');
+            $table->increments('id')->unique();
             $table->integer('id_user')->unsigned();
             $table->foreign('id_user')->references('id')->on('users');
-            $table->timestamps();
+            $table->integer('id_author')->unsigned();
+            $table->foreign('id_author')->references('id')->on('users');
+            $table->integer('id_content')->unsigned();
+            //связь не работает выдает ошибку прилось прописывать в ручную
+            //$table->foreign('id_content')->references('id')->on('contents');
         });
-        DB::table('posts')->insert([
-            'content' => 'text',
-            'id_user' => 1
-        ]);
+
+//        Schema::table('contents', function($table){
+//            $table->foreign('id_content')->references('id')->on('contents')->onDelete('cascade');
+//        });
     }
 
     /**
+     *
      * Reverse the migrations.password_resets
      *
      * @return void
