@@ -33,23 +33,61 @@ class PostController extends Controller
         $data = $request->all();
         $user = User::find($data['id_user']);
         if (isset($user->id)) {
-            $posts = DB::select('
-            SELECT *, COALESCE((SELECT COUNT(ratings.status)
-                    FROM ratings
-                    WHERE ratings.status = \'1\'
-                      AND posts.id = ratings.id_post)) as count_like,
-          COALESCE((SELECT COUNT(ratings.status)
-                    FROM ratings
-                    WHERE ratings.status = \'-1\'
-                      AND posts.id = ratings.id_post)) as count_dislike
-FROM posts
-WHERE posts.id_user = ?
-ORDER by  posts.created_at  DESC   LIMIT ?', [$user->id, $data['post_limit']]);
+            $posts = Post::all()
+                ->where('id_user', '=', $user->id)
+                ->sortByDesc('created_at')->take($data['post_limit']);
 
-            return view('post.all', ['posts' => collect($posts)]);
+            return view('post.all', ['posts' => $posts]);
         }
 
         return view('post.all', []);
+    }
+
+    public function best(Request $request)
+    {
+        $data = $request->all();
+        $posts = Post::best();
+
+//        $data = $request->all();
+//        $posts = Post::select('SELECT * ,COALESCE((SELECT COUNT(ratings.status)
+//                            FROM ratings
+//                          WHERE ratings.status = `1`
+//                             AND posts.id = ratings.id_post)) as count_like
+//                                     FROM posts
+//        ORDER by  count_like  DESC   ')->get();
+        //        $query = '
+//                    SELECT *,
+//                    COALESCE((SELECT `name`FROM users WHERE posts.id_user = users.id)) as user_name,
+//                    COALESCE((SELECT COUNT(ratings.status)
+//                            FROM ratings
+//                            WHERE ratings.status = \'1\'
+//                              AND posts.id = ratings.id_post)) as count_like,
+//                  COALESCE((SELECT COUNT(ratings.status)
+//                            FROM ratings
+//                            WHERE ratings.status = \'-1\'
+//                              AND posts.id = ratings.id_post)) as count_dislike
+//        FROM posts
+//        ORDER by  count_like  DESC   LIMIT ?';
+        //WHERE posts.created_at > CURRENT_DATE() - ?
+        //        $result = '';
+        //        $data['time'] = 'week';
+        //        switch ($data['time']) {
+        //            case 'week':
+        //                $result = 7;
+        //                break;
+        //            case 'month':
+        //                $result = 30;
+        //                break;
+        //            case 'year':
+        //                $result = 365;
+        //                break;
+        //            default:
+        //                break;
+        //        }
+
+        //$posts = DB::select($query, [$data['post_limit']]);
+
+        return view('post.all', ['posts' => $posts]);
     }
 
     public function status(Request $request)
@@ -73,10 +111,6 @@ ORDER by  posts.created_at  DESC   LIMIT ?', [$user->id, $data['post_limit']]);
                 Rating::find($rating->id)->delete();
             }
         }
-    }
-
-    public function best()
-    {
     }
 
     /**

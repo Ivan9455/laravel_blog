@@ -1,25 +1,23 @@
-@for($i = 0;$i<count($posts);$i++)
+@forelse($posts as $post)
     <form class="form-horizontal post">
-        <div>{{$posts[$i]->content}}</div>
+        <p>Author:{{$post->getUser()->name}}</p>
+        <div>{{$post->content}}</div>
         <div class="post_status">
             <input type="button" class="btn btn-primary like status"
-                   value="like : {{$posts[$i]->count_like}}"
-                   data-post-id="{{$posts[$i]->id}}"
+                   value="like : {{$post->getCountLike()}}"
+                   data-post-id="{{$post->id}}"
                    data-status="1"
-                   data-post-id_user="{{$posts[$i]->id_user}}">
+                   data-post-id_user="{{$post->id_user}}">
             <input type="button" class="btn btn-primary dizlike status"
-                   value="dislike: {{$posts[$i]->count_dislike}}"
-                   data-post-id="{{$posts[$i]->id}}"
+                   value="dizlike: {{$post->getCountDislike()}}"
+                   data-post-id="{{$post->id}}"
                    data-status="-1"
-                   data-post-id_user="{{$posts[$i]->id_user}}">
+                   data-post="{{$post}}">
             <input type="button" class="btn btn-group" value="&#10150;">
-            <div class="post_time">{{$posts[$i]->created_at}}</div>
+            <div class="post_time">{{$post->created_at}}</div>
         </div>
     </form>
-@endfor
-@if(empty($posts))
+@empty
     <div>постов нет</div>
-@endif
-
-
-
+@endforelse
+{{--{{dd($posts)}}--}}

@@ -61,3 +61,6 @@
 .post_load {
     display: inherit;
 }
+.m-0-100{
+    margin: 0 100px;
+}

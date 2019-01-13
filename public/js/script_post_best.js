@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    // Post.eventLoad();
-    // Post.load();
-    // Post.eventStatus();
+    Post.eventLoadBest();
+    Post.loadBest();
+    Post.eventStatusBest();
     // Post.eventStatus();
 });

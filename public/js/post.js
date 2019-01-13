@@ -11,13 +11,35 @@ let Post = {
             }
         });
     },
-    eventAdd:function(){
+    eventAdd: function () {
         $(".add").click(function (e) {
             e.preventDefault();
             Post.save($('.post_store').serialize())
         });
     },
-    eventStatus:function(){
+    eventStatusBest:function(){
+        $(".post_all").on('click', ".status", function () {
+            if(Post.userAuth()==='true'){
+                $.ajax({
+                    type: 'POST',
+                    url: '/post/status',
+                    data: {
+                        id: $(this).attr('data-post-id'),
+                        id_user: $(this).attr('data-post-id_user'),
+                        status: $(this).attr('data-status'),
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (result) {
+                        Post.loadBest($('.post_all')[0].children.length);
+                    }
+                })
+            }else{
+                document.location.href = document.location.origin + '/login';
+            }
+        });
+
+    },
+    eventStatus: function () {
         $(".post_all").on('click', ".status", function () {
             $.ajax({
                 type: 'POST',
@@ -54,6 +76,41 @@ let Post = {
                 $('.post_all').html(result);
             }
         });
+    },
+    eventLoadBest: function () {
+        $('.post_load').click(function (e) {
+            e.preventDefault();
+            Post.loadBest($('.post_all')[0].children.length + Post.postLimit)
+        })
+    },
+    loadBest: function (post_limit = Post.postLimit) {
+        $.ajax({
+            type: 'POST',
+            url: '/post/best',
+            data: {
+                post_limit: post_limit,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (result) {
+                $('.post_all').html(result);
+            }
+        });
+    },
+    userAuth: function () {
+        $.when(
+            $.ajax({
+                type: 'POST',
+                url: '/auth',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (result) {
+                    return result;
+                }
+            })
+        ).done(function (result) {
+            return result;
+        })
     }
 };
 
