@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Content;
 use App\Rating;
 use App\Post;
 use App\User;
@@ -48,26 +49,26 @@ class PostController extends Controller
         $data = $request->all();
         $posts = Post::best();
 
-//        $data = $request->all();
-//        $posts = Post::select('SELECT * ,COALESCE((SELECT COUNT(ratings.status)
-//                            FROM ratings
-//                          WHERE ratings.status = `1`
-//                             AND posts.id = ratings.id_post)) as count_like
-//                                     FROM posts
-//        ORDER by  count_like  DESC   ')->get();
+        //        $data = $request->all();
+        //        $posts = Post::select('SELECT * ,COALESCE((SELECT COUNT(ratings.status)
+        //                            FROM ratings
+        //                          WHERE ratings.status = `1`
+        //                             AND posts.id = ratings.id_post)) as count_like
+        //                                     FROM posts
+        //        ORDER by  count_like  DESC   ')->get();
         //        $query = '
-//                    SELECT *,
-//                    COALESCE((SELECT `name`FROM users WHERE posts.id_user = users.id)) as user_name,
-//                    COALESCE((SELECT COUNT(ratings.status)
-//                            FROM ratings
-//                            WHERE ratings.status = \'1\'
-//                              AND posts.id = ratings.id_post)) as count_like,
-//                  COALESCE((SELECT COUNT(ratings.status)
-//                            FROM ratings
-//                            WHERE ratings.status = \'-1\'
-//                              AND posts.id = ratings.id_post)) as count_dislike
-//        FROM posts
-//        ORDER by  count_like  DESC   LIMIT ?';
+        //                    SELECT *,
+        //                    COALESCE((SELECT `name`FROM users WHERE posts.id_user = users.id)) as user_name,
+        //                    COALESCE((SELECT COUNT(ratings.status)
+        //                            FROM ratings
+        //                            WHERE ratings.status = \'1\'
+        //                              AND posts.id = ratings.id_post)) as count_like,
+        //                  COALESCE((SELECT COUNT(ratings.status)
+        //                            FROM ratings
+        //                            WHERE ratings.status = \'-1\'
+        //                              AND posts.id = ratings.id_post)) as count_dislike
+        //        FROM posts
+        //        ORDER by  count_like  DESC   LIMIT ?';
         //WHERE posts.created_at > CURRENT_DATE() - ?
         //        $result = '';
         //        $data['time'] = 'week';
@@ -134,9 +135,12 @@ class PostController extends Controller
     {
         $data = $request->all();
         Post::create([
-            'content' => $data['content'],
-            'id_user' => Auth::id(),
-            'created_at' => now(),
+            'id_user' => 1,
+            'id_author' => 1,
+            'id_content' => Content::create([
+                'text' => $data['content'],
+                'created_at' => now()
+            ])->id
         ]);
     }
 

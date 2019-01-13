@@ -4,6 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Content::class, function (Faker $faker) {
     return [
-        'content' => $faker->content,
+        'text' => $faker->text,
+        'created_at' => now()
     ];
 });

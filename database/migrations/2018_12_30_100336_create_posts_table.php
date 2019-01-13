@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration
             $table->integer('id_author')->unsigned();
             $table->foreign('id_author')->references('id')->on('users');
             $table->integer('id_content')->unsigned();
+            $table->timestamps();
             //связь не работает выдает ошибку прилось прописывать в ручную
             //$table->foreign('id_content')->references('id')->on('contents');
         });

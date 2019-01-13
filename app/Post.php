@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class Post extends Model
 {
+    protected $fillable = ['id_user', 'id_author', 'id_content'];
+
+    public function getContent()
+    {
+        return Content::find($this->id);
+    }
 
     public function getCountLike()
     {
